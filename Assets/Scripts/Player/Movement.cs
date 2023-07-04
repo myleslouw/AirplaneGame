@@ -6,15 +6,16 @@ public class Movement : MonoBehaviour
 {
     Rigidbody rb;
 
-    private float dive = 0;
     private float rotate;
     private Vector3 planeRotation;
+    private float planeTilt;
+    
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        planeRotation = new Vector3(dive, 0, 0);
+        planeRotation = new Vector3(20, 0, 0);
     }
 
     // Update is called once per frame
@@ -25,30 +26,36 @@ public class Movement : MonoBehaviour
             Rise();
         } else
         {
-            PlaneRotation();
+            PlaneDroop();
         }
         //transform.Rotate(planeRotation, Space.Self);
     }
 
     private void Rise()
     {
+        //move up
+
+        print(rb.velocity);
+
         if(transform.position.y < 6)
         {
             rb.AddForce(new Vector3(0, 0.1f, 0), ForceMode.Force);
-            
-            planeRotation.x = dive;
+
+            if (transform.rotation.x > -0.3f)
+            {
+                transform.Rotate(-80 * Time.deltaTime, 0, 0);
+            }
         }
-        dive = Mathf.Lerp(0, 30, 0.1f);
-        planeRotation.x = dive;
-        transform.Rotate(planeRotation, Space.Self);
-        print(dive);
+       
     }
 
-    private void PlaneRotation()
+    private void PlaneDroop()
     {
         //droops plane
-        if (dive >= -20)
-        dive = Mathf.Lerp(dive, -20, 0.1f);
-        //planeRotation.x = dive;
+        if(transform.rotation.x < 0.5f)
+        {
+            transform.Rotate(60 * Time.deltaTime, 0, 0);
+
+        }
     }
 }
